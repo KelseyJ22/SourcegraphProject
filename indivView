@@ -1,0 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=US-ASCII"
+    pageEncoding="US-ASCII"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<%@ page import="blah.PerformSearchServlet" %>
+<%@ page import="java.util.*" %>
+<%@ page import="blah.Official" %>
+
+
+<%
+	List<Official> officials = (List<Official>)request.getSession().getAttribute(PerformSearchServlet.OFFICIAL);
+	String name = (String)request.getParameter("name");
+	Official official = officials.get(officials.indexOf(name));
+ %>
+<title> Individual Legislator</title>
+</head>
+<body>
+Legislator Type: <%=official.getType()%><br><br>
+District:  <%=official.getState()%><br>  <%=official.getDist()%><br><br>
+Name:  <%=official.getName()%><br><br>
+Party:  <%=official.getParty()%><br><br>
+Next election:  <%=official.getDate()%><br><br>
+Victory margin:  <%=official.getMargin()%><br><br> <br> <br>
+Fellows:  <%=official.getFellows()%><br><br>
+</body>
+</html>
