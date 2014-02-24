@@ -1,0 +1,33 @@
+<%@ page language="java" contentType="text/html; charset=US-ASCII"
+    pageEncoding="US-ASCII"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<%@ page import="blah.PerformSearchServlet" %>
+<%@ page import="java.util.*" %>
+<%@ page import="blah.Official" %>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Search Results</title>
+</head>
+<body>
+<form class="form-signin" action="/Sourcegraph/PerformSearchServlet" method="post">
+		<input type="text" class="form-control" name="name" placeholder="Hit enter to see all results.">
+		<div class="space"><span></span></div>
+		<input class="btn btn-primary btn-block form-control" type="submit" value="Search">
+		<%request.getSession().setAttribute(PerformSearchServlet.SEARCH_STRING, request.getParameter("query")); %>
+</form>
+<input type="radio" <%= request.getSession().setAttribute(PerformSearchServlet.SEARCH_TYPE, "address") %> name="display" value="yes"> search by address<br>
+<input type="radio" <%= request.getSession().setAttribute(PerformSearchServlet.SEARCH_TYPE, "district") %>name="display" value="no"> search by district
+
+<%List<Official> results = (List<Official>) request.getAttribute(PerformSearchServlet.OFFICIAL);%>
+
+<div class="box">
+Found <%=results.size()%> total results:
+<% for(Official current : results){
+		out.println("<li><a href=\"/jsps/indivView.jsp?name="+current.getName()+"\">+"+current.getName()+"</a></li>\n");
+		}%>
+</div>	
+</body>
+</html>
