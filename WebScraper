@@ -1,0 +1,73 @@
+package blah;
+/* URL url = new URL(webURL);
+
+in response-format put .json or .xml
+
+there are java libraries for json parsing -- json.org/java
+
+use Seokho's webScraper class */
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+
+public class WebScraper
+{
+	public static boolean isValid(String webURL)
+	{
+		try
+		{
+			URL url = new URL(webURL);
+			new BufferedReader(new InputStreamReader(url.openStream()));
+			return true;
+		}
+		catch(IOException e)
+		{
+			return false;
+		}
+	}
+	
+	public static String get(String webURL)
+	{
+		return get(webURL, true);
+	}
+	
+	public static String get(String webURL, boolean display)
+	{
+		while(true)
+		{
+			try
+			{
+				if(display)
+				{
+					System.out.println("Scraping "+webURL);
+				}
+				URL url = new URL(webURL);
+				BufferedReader in = new BufferedReader(
+						new InputStreamReader(url.openStream()));
+		
+				String inputLine = "";
+				StringBuilder builder = new StringBuilder(inputLine);
+		
+				while ((inputLine = in.readLine()) != null)
+				{
+					builder.append(inputLine);
+				}
+				
+				in.close();
+				return builder.toString();
+			}
+			catch(IOException e)
+			{
+				//e.printStackTrace();
+				System.err.println("Cannot Scrape "+webURL);
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch(InterruptedException ignored) {}
+			}
+		}
+	}
+}
