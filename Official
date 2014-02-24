@@ -1,0 +1,108 @@
+package blah;
+
+import java.util.*;
+
+public class Official {
+	
+	private String first;
+	private String last;
+	private String state;
+	private String district;
+	private int electionDate;
+	private String vicMargin;
+	private String party;
+	private String type;
+	private ArrayList<Official> others;
+
+	//full constructor
+	public Official(String n, String n2, String d, String st, int date, String marg, String p, String rep, ArrayList<Official> fellows){
+	    	this.first = n;
+	    	this.last = n2;
+	    	this.state = st;
+	    	this.district = d;
+	    	this.electionDate = date;
+	    	this.vicMargin = marg;
+	    	this.party = p;
+	    	this.type = rep;
+	    	this.others = fellows;
+	    }   
+	
+	//alternate constructor
+	public Official(){
+    	}
+	
+	//SETTERS
+	public void setFirst(String f){
+		this.first = f;
+	}
+	
+	public void setLast(String l){
+		this.last = l;
+	}
+	
+	public void setDist(String dist){
+		this.district = dist;
+	}
+	
+	public void setState(String s){
+		this.state = s;
+	}
+	
+	public void setDate(int date){
+		this.electionDate = date;
+	}
+	
+	public void setMargin(String margin){
+		this.vicMargin = margin;
+	}
+	
+	public void setParty(String party){
+		this.party = party;
+	}
+	
+	public void setType(String type){
+		this.type = type;
+	}
+	
+	public void setFellows(ArrayList<Official> fellows){
+		this.others = fellows;
+	}
+	
+	public void addFellow(Official fellow){
+		this.others.add(fellow);
+	}
+	
+	//GETTERS
+	public String getName(){
+		String name = this.last + ", " + this.first;
+		return name;
+	}
+	
+	public String getDist(){
+		return this.district;
+	}
+	
+	public String getState(){
+		return this.state;
+	}
+	
+	public int getDate(){
+		return this.electionDate;
+	}
+	
+	public String getMargin(){
+		return this.vicMargin;
+	}
+	
+	public String getParty(){
+		return this.party;
+	}
+	
+	public String getType(){
+		return this.type;
+	}
+	
+	public ArrayList<Official> getFellows(){
+		return this.others;
+	}
+}
