@@ -1,0 +1,49 @@
+package blah;
+
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class performSearchServlet
+ */
+@WebServlet("/performSearchServlet")
+public class PerformSearchServlet extends HttpServlet {
+	
+	public static final String SEARCH_STRING = "SEARCH_STRING";
+	public static final String SEARCH_TYPE = "SEARCH_TYPE";
+	public static final String OFFICIAL = "OFFICIAL";
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public PerformSearchServlet() {
+        super();
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// Auto-generated method stub
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String searchString = (String) request.getParameter("query");
+		Parser p = new Parser();
+		
+		request.setAttribute(OFFICIAL, p.performSearch(searchString));
+		
+        RequestDispatcher nextPage = request.getRequestDispatcher("jsps/searchResults.jsp");
+        nextPage.forward(request, response);
+	}
+}
