@@ -1,0 +1,110 @@
+package blah;
+import java.util.*;
+
+
+public class Parser extends WebScraper{
+	String results;
+	
+	public Parser() {	
+	}
+	
+	private Official buildOfficial(int num){
+		Official official = new Official();
+		if(num == 0){
+			official.setType("sen");
+			getSenInfo(official);
+		}
+		else {
+			official.setType("rep");
+			getRepInfo(official, num);
+		}
+		return official;
+	}
+	
+	private int getStart(int num, String[] tokens){
+		int i=0;
+		while(true){
+			if(tokens[i].equals("\"house\'")) break;
+			i++;
+		}
+		if(num == 1){
+			return i;
+		} else while(true){
+			i++;
+			if(tokens[i].equals("\"house\"")) return i;
+		}
+	}
+	
+	private void getRepInfo(Official off, int num){
+		String[] tokens = results.split(":");
+		int i = getStart(num, tokens);
+		
+		while(true){
+			if(tokens[i].equals("\"district\"")) off.setDist(tokens[i+1]);
+			if(tokens[i].equals("\"first_name\"")) off.setFirst(tokens[i+1]);
+			if(tokens[i].equals("\"last_name\"")) off.setLast(tokens[i+1]);
+			if(tokens[i].equals("\"party\"")){
+				if(tokens[i+1].equals("D")) off.setParty("democrat");
+				else off.setParty("republican");
+			}
+			if(tokens[i].equals("\"state_name\"")) off.setState(tokens[i+1]);
+			if(tokens[i].equals("\"state_name\"")) off.setState(tokens[i+1]);
+			if(tokens[i].equals("\"term_end\"")){
+				String nextElec = tokens[i+1];
+				String year = nextElec.substring(1, 5);
+				int yr = Integer.parseInt("year");
+				yr -= 1;
+				off.setDate(yr);
+			}
+			i++;
+			if(tokens[i].equals("\"count\"")) break;
+		}
+	}
+	
+	private void getSenInfo(Official off){
+		String[] tokens = results.split(":");
+		int i=0;
+		while(true){
+			if(tokens[i].equals("\"first_name\"")) off.setFirst(tokens[i+1]);
+			if(tokens[i].equals("\"last_name\"")) off.setLast(tokens[i+1]);
+			if(tokens[i].equals("\"party\"")){
+				if(tokens[i+1].equals("D")) off.setParty("democrat");
+				else off.setParty("republican");
+			}
+			if(tokens[i].equals("\"state_name\"")) off.setState(tokens[i+1]);
+			if(tokens[i].equals("\"state_name\"")) off.setState(tokens[i+1]);
+			if(tokens[i].equals("\"term_end\"")){
+				String nextElec = tokens[i+1];
+				String year = nextElec.substring(1, 5);
+				int yr = Integer.parseInt("year");
+				yr -= 1;
+				off.setDate(yr);
+			}
+			off.setDist("none"); //senators don't have districts
+			i++;
+			if(tokens[i].equals("\"house\"")) break;
+		}
+	}
+	
+	private void addFellows(ArrayList<Official> parsedResults){
+		for(int i=0; i<parsedResults.size(); i++){
+			for(int j=0; j<parsedResults.size(); j++){
+				if(j!=i) parsedResults.get(i).addFellow(parsedResults.get(j));
+			}
+		}
+	}
+	
+	public ArrayList<Official> performSearch(String address){
+		String query = "http://congress.api.sunlightfoundation.com/legislators/locate?zip=" + address + "&apikey=4bc7ac86958f494c9bd018cb289e22a0";
+		results = get(query);
+		ArrayList<Official> parsedResults = new ArrayList<Official>();
+		for(int i= 0; i < 3; i++){
+			parsedResults.add(buildOfficial(i));
+		}
+		addFellows(parsedResults);
+		return parsedResults;
+	}
+	
+	public static void main(String[] args) {
+	}
+}
